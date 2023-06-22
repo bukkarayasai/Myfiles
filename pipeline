@@ -1,5 +1,15 @@
 node
 {
+properties([
+  pipelineTriggers([
+    [
+      $class: 'GitHubPushTrigger',
+      triggerEvents: [
+        [ $class: 'GitHubPushEvent' ]
+      ]
+    ]
+  ])
+])
     stage('Codecheckout') {
     git 'https://github.com/bukkarayasai/Myfiles.git'
 }

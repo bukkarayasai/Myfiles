@@ -1,0 +1,19 @@
+node
+{
+    stage('Codecheckout') {
+    git 'https://github.com/bukkarayasai/Myfiles.git'
+}
+stage('buildcode') {
+    sh 'mvn clean package'
+}
+stage('deploycode') {
+    deploy adapters: [tomcat9(credentialsId: '55fe5c01-ba53-403d-a0e4-61fc86d0498c', path: '', url: 'http://172.31.39.250:8080')], contextPath: 'testpipeline', war: '**/*.war'
+}
+stage('testing code') {
+   git 'https://github.com/bukkarayasai/Dev.git'
+   sh 'java -jar /home/ubuntu/.jenkins/workspace/testing/testing.jar'
+   }
+stage('delivery code') {
+   deploy adapters: [tomcat9(credentialsId: 'b8736bae-5e0c-40ce-9bc3-39a2ba72d328', path: '', url: 'http://172.31.47.201:8080')], contextPath: 'prodpipeline', war: '**/*.war'
+   }
+}
